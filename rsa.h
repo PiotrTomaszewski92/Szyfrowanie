@@ -62,7 +62,7 @@ rsa::rsa(){
 	}while(check);
 	do{
 		check = false;
-		cout << "Please input q (it must be prime with p): ";
+		cout << "Please input q (p and q must be coprime!): ";
 		cin >> q;
 		if(q<=0 || p%q || q%p){
 			cout << "q must be positive and prime with p!\n";
@@ -75,22 +75,14 @@ rsa::rsa(){
 
 	do{  // in this part, we want user to input a and b
 		check = false;
-		cout << "Please input a and b:\n1<a<m and gcd(a,m)=1: ";
+		cout << "Please input a:\n1<a<m and gcd(a,m)=1: ";
 		cin >> a;
 		if(a<=1 || a>=m || GCD(a,m)!=1){
 			cout << "You have given the wrong number!\n";
 			check = true;
 		}
 	}while(check);
-	do{
-		check = false;
-		cout << "(a*b)mod m = 1: ";
-		cin >> b;
-		if((a*b)%m!=1){
-			cout << "You have given the wrong number!\n";
-			check = true;
-		}
-	}while(check);
+	b = mod_inv(a, m); //modular inversion (a^(-1)mod m)
 }
 
 rsa::listEL::listEL(){
