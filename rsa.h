@@ -1,5 +1,6 @@
 #ifndef RSA_CLASS
 #define RSA_CLASS
+#include <vector>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -10,17 +11,17 @@ class rsa{
 	long n,m;
 	long a,b;
 	string text;
-	class textBlocks{
+	class listEL{
 	public:
 		class oneBlock{
 		public:
-			char *block;
-			int *numblock;
-		};
-		textBlocks *next;
-		textBlocks();
+			string block;
+			vector<int> numblock;
+		}value;
+		listEL *next;
+		listEL();
 	};
-	textBlocks *head;
+	listEL *head;
 public:
 	rsa();
 	string& parseFile(string&);
@@ -44,11 +45,11 @@ string& rsa::parseFile(string &directory){
 }
 
 rsa::rsa(){
-	head = new textBlocks;
+	head = new listEL;
 	string directory;
 	cout << "Please input the directory of your file to encrypt: ";
 	cin >> directory;
-	text = parsefile(directory);
+	text = parseFile(directory);
 	bool check; //in this part, we want user to input p and q
 	do{
 		check = false;
@@ -62,7 +63,7 @@ rsa::rsa(){
 	do{
 		check = false;
 		cout << "Please input q (it must be prime with p): ";
-		cin q;
+		cin >> q;
 		if(q<=0 || p%q || q%p){
 			cout << "q must be positive and prime with p!\n";
 			check = true;
@@ -70,7 +71,7 @@ rsa::rsa(){
 	}while(check);
 
 	n = p*q; //calculating n and m
-	m = (p-1)(q-1);
+	m = (p-1)*(q-1);
 
 	do{  // in this part, we want user to input a and b
 		check = false;
@@ -80,7 +81,7 @@ rsa::rsa(){
 			cout << "You have given the wrong number!\n";
 			check = true;
 		}
-	while(check);
+	}while(check);
 	do{
 		check = false;
 		cout << "(a*b)mod m = 1: ";
@@ -92,23 +93,26 @@ rsa::rsa(){
 	}while(check);
 }
 
-rsa::textBlocks::textBlocks(){
+rsa::listEL::listEL(){
 	next = NULL;
 }
 
-rsa::createList(){
-	long length = text.size();
-	textBlocks *newel = new textBlocks;
-	typedef textBlocks::oneBlock value;
-	typedef textBlocks::next nextptr;
-	for(int i = 9; i < length; i+=10){
-
-	}
+void rsa::createList(){
+	long i = 0;
+	do{
+		listEL *newel = new listEL;
+		newel->value.block = text.substr(i, 10); // dividing the given text into 10-letter blocks
+		for(int j = 0; j < 10; ++j) newel->value.numblock.push_back((int)newel->value.block[j]); //translating into ASCII
+		newel->next = head->next; //adding the element to our list
+		head->next = newel;
+		delete newel;
+		i+=10;
+	}while(head->next->value.block.size()==10);
 }
 
 //------------------------DESTRUCTORS------------------------
 rsa::~rsa(){
-	textBlocks *help;
+	listEL *help;
 	if(head->next){
 		while(head->next->next){
 			help = head->next->next;
