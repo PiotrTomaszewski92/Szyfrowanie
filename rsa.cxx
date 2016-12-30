@@ -1,7 +1,7 @@
-#include <iostream>
 #include "rsa.h"
-using namespace std;
 
 main(){
-
+	rsa code;
+	code.createList();
+	code.encrypt();
 }
