@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include "side_functions.h"
 using namespace std;
 class rsa{
@@ -16,7 +17,9 @@ class rsa{
 		class oneBlock{
 		public:
 			string block;
-			vector<int> numblock;
+			vector<long> numblock;
+			vector<long> encrypted;
+			string encryptedblock;
 		}value;
 		listEL *next;
 		listEL();
@@ -27,6 +30,7 @@ public:
 	string& parseFile(string&);
 	void createList();
 	~rsa();
+	void encrypt();
 };
 
 string& rsa::parseFile(string &directory){
@@ -102,6 +106,21 @@ void rsa::createList(){
 	}while(head->next->value.block.size()==10);
 }
 
+void rsa::encrypt(){
+	listEL *pointhelp = head->next;
+	long power;
+	while(pointhelp){
+		for(int j=0; j<10; ++j){
+			power = pow(pointhelp->value.numblock[j],a);
+			pointhelp->value.encrypted.push_back(power%m);
+			pointhelp->value.encryptedblock.push_back(static_cast<char>(pointhelp->value.encrypted[j]));
+			std::cout << pointhelp->value.encryptedblock[j] << ' ';
+		}
+
+		pointhelp = pointhelp->next;
+	}
+	delete pointhelp;
+}
 //------------------------DESTRUCTORS------------------------
 rsa::~rsa(){
 	listEL *help;
