@@ -8,11 +8,11 @@ long GCD(long a, long m){
 	return a;
 }
 
-int mod_inv(int a, int b)
+long mod_inv(long a, long b)
 {
-	int b0 = b, t, q;
-	int x0 = 0, x1 = 1;
 	if (b == 1) return 1;
+	long b0 = b, t, q;
+	long x0 = 0, x1 = 1;
 	while (a > 1) {
 		q = a / b;
 		t = b, b = a % b, a = t;
